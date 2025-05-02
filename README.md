@@ -2,6 +2,11 @@
 
 LogStream é uma ferramenta para o monitoramento e transmissão de arquivos de log em tempo real para uma API WebScocket.
 
+## Instalação
+```
+pip install https://github.com/DClickMichael/log-stream/releases/download/v1.0/dclick_log_stream-1.0.1-py3-none-any.whl
+```
+
 ## Configuração
 
 Antes de usar o LogStream, configure o arquivo `.logstream` no diretório raiz do seu projeto. Este arquivo deve conter as seguintes variáveis:
