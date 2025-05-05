@@ -98,13 +98,16 @@ class LogStream(Config):
     """Classe de streaming de logs para o LogStream API."""
 
     @classmethod
-    def send_log(cls, log_content: str) -> Dict[str, str]:
-        """Monitora e faz o envio do log para o LogStream API"""
-        params = {
-            "log_content": log_content,
+    def send_logs(cls, logs: List[str]) -> Dict[str, str]:
+        """Envia uma lista de logs para o LogStream API"""
+        if not logs:
+            return {}
+        
+        data = {
+            "logs": logs,
             "automation_id": cls._automation_id
         }
-        request(method="POST", url=f"{cls._api_url}/logs/{cls._automation_id}", params=params)
+        request(method="POST", url=f"{cls._api_url}/batch/{cls._automation_id}", json=data)
 
     @classmethod
     def clear_buffer(cls) -> Dict[str, str]:
