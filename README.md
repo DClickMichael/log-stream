@@ -1,6 +1,11 @@
 # LogStream
 
-LogStream é uma ferramenta para o monitoramento e transmissão de arquivos de log em tempo real para uma API WebScocket.
+LogStream é uma ferramenta que monitora e transmite arquivos de log em tempo real para uma API WebSocket.
+
+## Instalação
+```
+pip install https://github.com/DClickMichael/log-stream/releases/download/v1.0/dclick_log_stream-1.0.2-py3-none-any.whl
+```
 
 ## Configuração
 
@@ -9,7 +14,7 @@ Antes de usar o LogStream, configure o arquivo `.logstream` no diretório raiz d
 ```env
 AUTOMATION_ID=id_automacao
 AUTOMATION_NAME=nome_automacao
-LOG_FILE=caminho//.log
+LOG_FILE=caminho\.log
 ```
 
 ## Uso Básico
@@ -21,7 +26,7 @@ from logstream import LogStream
 
 @LogStream()
 def sua_funcao():
-    # Os logs serão automaticamente monitorados e enviados para a API
+    # Os logs serão automaticamente monitorados e enviados para a API enquanto a função decorada está em execução
     pass
 ```
 
