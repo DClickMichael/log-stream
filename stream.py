@@ -1,6 +1,7 @@
 import os
 import threading
-from typing import Optional, Callable, Dict, ClassVar, Literal
+import time
+from typing import Optional, Callable, Dict, ClassVar, Literal, List
 from functools import wraps
 from pathlib import Path
 from dotenv import load_dotenv
@@ -47,7 +48,7 @@ class Config:
     _project_path: Path = Path.cwd() # Sempre será o diretório do projeto
 
     _observer: ClassVar[Optional[Observer]] = None
-    _handler: ClassVar[Optional[LogFileHandler]] = None
+    _handler: ClassVar[Optional[LogFileMonitor]] = None
 
     _api_url: ClassVar[str] = "https://dclick-logstream.insidev.com.br"
     _env_file_name: ClassVar[str] = ".logstream"
@@ -114,7 +115,7 @@ class LogStream(Config):
         """Limpa o buffer inicial."""
         request(method="POST", url=f"{cls._api_url}/logs/{cls._automation_id}/clear")
 
-    _check_interval: ClassVar[float] = 0.1
+    _check_interval: ClassVar[float] = 5.0  # Intervalo de verificação em segundos
     _is_running: ClassVar[bool] = False
     _thread: ClassVar[Optional[threading.Thread]] = None
     _last_position: ClassVar[int] = 0
@@ -141,22 +142,22 @@ class LogStream(Config):
         # Limpa o buffer inicial
         cls.clear_buffer()
 
-        def send(line):
-            try:
-                cls.send_log(log_content=line)
-            except Exception as e:
-                print(f"Erro ao enviar log: {e}")
-
-        cls._handler = LogFileHandler(cls._log_file, send)
+        cls._handler = LogFileMonitor(cls._log_file, lambda x: None)  # Callback vazio pois agora usamos o buffer
         cls._observer = Observer()
         cls._observer.schedule(cls._handler, path=str(Path(cls._log_file).parent), recursive=False)
         cls._observer.start()
+        
         cls._is_running = True
+        cls._thread = threading.Thread(target=cls._monitor_thread)
+        cls._thread.start()
 
     @classmethod
     def stop(cls) -> None:
         """Interrompe o streaming de logs"""
         cls._is_running = False
+        if cls._thread:
+            cls._thread.join()
+            cls._thread = None
         if cls._observer:
             cls._observer.stop()
             cls._observer.join()
