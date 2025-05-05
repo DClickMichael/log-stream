@@ -12,12 +12,13 @@ logging.getLogger("httpx").setLevel(logging.NOTSET) # Suprime os logs do httpx
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-class LogFileHandler(FileSystemEventHandler):
+class LogFileMonitor(FileSystemEventHandler):
     """Classe para monitorar o arquivo de log e enviar os logs para o LogStream API"""
     def __init__(self, log_file, callback):
         self.log_file = log_file
         self.callback = callback
         self._last_position = 0
+        self._buffer: List[str] = []
 
     def on_modified(self, event):
         """Evento que é chamado quando o arquivo de log é modificado"""
@@ -29,7 +30,13 @@ class LogFileHandler(FileSystemEventHandler):
                 for line in new_lines:
                     line = line.strip()
                     if line:
-                        self.callback(line)
+                        self._buffer.append(line)
+
+    def get_buffer(self) -> List[str]:
+        """Retorna o buffer atual e limpa-o"""
+        buffer = self._buffer.copy()
+        self._buffer.clear()
+        return buffer
 
 class Config:
     """Configurações do LogStream"""
