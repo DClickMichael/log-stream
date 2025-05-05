@@ -5,6 +5,9 @@ from functools import wraps
 from pathlib import Path
 from dotenv import load_dotenv
 from httpx import request
+import logging
+
+logging.getLogger("httpx").setLevel(logging.NOTSET) # Suprime os logs do httpx
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
