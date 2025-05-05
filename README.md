@@ -4,12 +4,7 @@ LogStream é uma ferramenta que monitora e transmite arquivos de log em tempo re
 
 ## Instalação
 ```
-pip install https://github.com/DClickMichael/log-stream/releases/download/v1.0/dclick_log_stream-1.0.2-py3-none-any.whl
-```
-
-## Instalação
-```
-pip install https://github.com/DClickMichael/log-stream/releases/download/v1.0/dclick_log_stream-1.0.1-py3-none-any.whl
+pip install https://github.com/DClickMichael/log-stream/releases/download/v1.0.2/dclick_log_stream-1.0.2-py3-none-any.whl
 ```
 
 ## Configuração
