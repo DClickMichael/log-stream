@@ -22,7 +22,7 @@ LOG_FILE=caminho\.log
 O LogStream fornece um decorador que gerencia automaticamente o ciclo de vida do monitoramento de logs. Aqui está um exemplo básico de uso:
 
 ```python
-from logstream import LogStream
+from dclick_log_stream import LogStream
 
 @LogStream()
 def sua_funcao():
