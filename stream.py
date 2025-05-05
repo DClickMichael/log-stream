@@ -110,6 +110,19 @@ class LogStream(Config):
     _last_position: ClassVar[int] = 0
 
     @classmethod
+    def _monitor_thread(cls) -> None:
+        """Thread que monitora e envia os logs periodicamente"""
+        while cls._is_running:
+            if cls._handler:
+                logs = cls._handler.get_buffer()
+                if logs:
+                    try:
+                        cls.send_logs(logs)
+                    except Exception as e:
+                        print(f"Erro ao enviar logs: {e}")
+            time.sleep(cls._check_interval)
+
+    @classmethod
     def start(cls) -> None:
         """Inicia o streaming de logs em uma thread separada."""
         if not os.path.exists(cls._log_file):
